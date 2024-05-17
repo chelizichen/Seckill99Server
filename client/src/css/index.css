@@ -1,0 +1,60 @@
+/* seckill-list.css */
+.seckill-list-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  .ant-table-thead > tr > th {
+    background-color: #f0f2f5;
+    border-bottom: 1px solid #d9dce0;
+    font-weight: 600;
+  }
+  
+  .ant-table-tbody > tr:hover {
+    background-color: #eaf8ff;
+  }
+  
+  .ant-table-row > td {
+    padding: 16px 8px;
+  }
+  
+  .ant-table-pagination {
+    margin-top: 24px;
+  }
+
+
+
+.list-container {
+  margin: 24px 0;
+}
+
+.list-item {
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f2f5;
+}
+
+.list-item-name {
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.85);
+  display: block;
+}
+
+.list-item-path {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.45);
+  margin-top: 4px;
+  display: block;
+}
+
+.link {
+  text-decoration: none;
+  color: inherit;
+}
+
+@media screen and (max-width: 768px) {
+  .list-container {
+    width: 100%;
+    margin: 16px 0;
+  }
+}
