@@ -1,29 +1,27 @@
 /* seckill-list.css */
 .seckill-list-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 24px;
-  }
-  
-  .ant-table-thead > tr > th {
-    background-color: #f0f2f5;
-    border-bottom: 1px solid #d9dce0;
-    font-weight: 600;
-  }
-  
-  .ant-table-tbody > tr:hover {
-    background-color: #eaf8ff;
-  }
-  
-  .ant-table-row > td {
-    padding: 16px 8px;
-  }
-  
-  .ant-table-pagination {
-    margin-top: 24px;
-  }
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
 
+.ant-table-thead > tr > th {
+  background-color: #f0f2f5;
+  border-bottom: 1px solid #d9dce0;
+  font-weight: 600;
+}
 
+.ant-table-tbody > tr:hover {
+  background-color: #eaf8ff;
+}
+
+.ant-table-row > td {
+  padding: 16px 8px;
+}
+
+.ant-table-pagination {
+  margin-top: 24px;
+}
 
 .list-container {
   margin: 24px 0;
