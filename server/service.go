@@ -12,9 +12,10 @@ import (
 )
 
 const (
-	rds_key_info     = "rds_key_info|"
-	rds_key_count    = "rds_key_count|"
-	rds_history_hash = "rds_history_hash"
+	rds_key_info     = "rds_key_info|"    // hash
+	rds_key_count    = "rds_key_count|"   // hash
+	rds_history_buy  = "rds_history_buy|" // hash
+	rds_history_hash = "rds_history_hash" // hashList
 )
 
 const layout = "2006-01-02T15:04:05.000Z"
@@ -110,6 +111,7 @@ func seckill(c *gin.Context) {
 			"error": "商品已售空",
 		})
 	}
+	GRDB.LPush(RDBContext, rds_history_buy, req.UserHash)
 	c.AbortWithStatus(http.StatusOK)
 }
 
