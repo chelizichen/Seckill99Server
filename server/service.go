@@ -17,6 +17,8 @@ const (
 	rds_history_hash = "rds_history_hash"
 )
 
+const layout = "2006-01-02T15:04:05.000Z"
+
 // 节点每次单例访问
 var localHash = make(map[string]SeckillInfo)
 
@@ -76,13 +78,10 @@ func seckill(c *gin.Context) {
 	info := fmt.Sprintf("%v%v", rds_key_info, req.SeckillHashKey)
 	s, has := localHash[info]
 	if !has {
-		var get_info *SeckillInfo
-		if errString := GRDB.Get(RDBContext, info).Scan(&get_info).Error(); errString != "" {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"error": "RDBContext Get Error " + info,
-			})
-			return
-		}
+		get_info := &SeckillInfo{}
+		fmt.Println("info", info)
+		GRDB.Get(RDBContext, info).Scan(get_info)
+		fmt.Println("get_info", get_info)
 		localHash[info] = *get_info
 		s = *get_info
 	}
@@ -90,23 +89,27 @@ func seckill(c *gin.Context) {
 	now := time.Now()
 
 	// 添加错误处理
-	could, err := time.ParseDuration(s.ColudBuyTime)
+	could, err := time.Parse(layout, s.ColudBuyTime)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid could_buy_time format",
+			"error": "Invalid could_buy_time format" + err.Error(),
 		})
 		return
 	}
-	could_but_time := time.Time{}.Add(could)
-	b := now.Before(could_but_time)
+	b := now.Before(could)
 	if b {
-		c.JSON(http.StatusOK, gin.H{
+		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "没到活动时间",
 		})
 		return
 	}
-	count := fmt.Sprintf("%v%v", rds_key_info, req.SeckillHashKey)
-	GRDB.DecrBy(RDBContext, count, 1)
+	count := fmt.Sprintf("%v%v", rds_key_count, req.SeckillHashKey)
+	value := GRDB.DecrBy(RDBContext, count, 1)
+	if value.Val() <= 0 {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": "商品已售空",
+		})
+	}
 	c.AbortWithStatus(http.StatusOK)
 }
 
@@ -152,11 +155,9 @@ func getSeckillList(c *gin.Context) {
 	for _, v := range vals {
 		fmt.Println("v", v)
 		info := fmt.Sprintf("%v%v", rds_key_info, v.Member)
-		fmt.Println("info", info)
 		result := &SeckillInfo{}
 		GRDB.Get(RDBContext, info).Scan(result)
 		if result.SeckillHashKey != "" {
-			// layout := "2006-01-02T15:04:05.000Z"
 			// d, err := time.Parse(layout, result.ColudBuyTime)
 			// if err != nil {
 			// 	fmt.Println("Parse Error" + err.Error())
