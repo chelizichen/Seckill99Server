@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Typography, Button,notification } from 'antd';
+import  { useEffect } from 'react';
+import { Typography,notification } from 'antd';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
@@ -23,7 +23,7 @@ const Seckill = () => {
 
   const fetchSeckillActivity = async (hashKey) => {
     try {
-      const response = await axios.post('/api/seckill', { hashKey: hashKey,userHash:"123124nkasd",userBuyTime:moment().format("YYYY-MM-DD HH:mm:ss") });
+      const response = await axios.post('/seckill99server/seckill', { hashKey: hashKey,userHash:"123124nkasd",userBuyTime:moment().format("YYYY-MM-DD HH:mm:ss") });
       if (response.data.error) {
         openNotification('Failed to fetch seckill activity: ' + response.data.error);
       } 

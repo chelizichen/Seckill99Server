@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { Form, Input, DatePicker, Button, notification } from "antd";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -19,7 +18,7 @@ const SetSeckillKey = () => {
   const onFinish = async (values) => {
     try {
       values.seckillCount = Number(values.seckillCount);
-      const response = await axios.post("/api/setSeckillKey", values);
+      const response = await axios.post("/seckill99server/setSeckillKey", values);
       if (response.data.error) {
         openNotification("Failed to create seckill activity: " + response.data.error);
       } else {

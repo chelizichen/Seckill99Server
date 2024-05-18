@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Table, Typography, } from 'antd';
 import axios from 'axios';
 import "../css/index.css"
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 const columns = [
   {
     title: '商品名称',
@@ -21,10 +22,10 @@ const columns = [
   {
     title: '操作',
     dataIndex: '',
-    render: (value, record) => (
-      <a href={`/seckill/${record.hashKey}`}>
+    render: (_, record) => (
+      <Link to={`/seckill/${record.hashKey}`}>
         秒杀
-      </a>
+      </Link>
     ),
   },
 ];
@@ -38,7 +39,7 @@ const SeckillList = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('/api/getSeckillList');
+      const response = await axios.get('/seckill99server/getSeckillList');
       if (response.data.error) {
         console.error('Error fetching seckill list:', response.data.error);
         return;
