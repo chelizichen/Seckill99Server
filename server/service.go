@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -105,12 +106,22 @@ func seckill(c *gin.Context) {
 		return
 	}
 	count := fmt.Sprintf("%v%v", rds_key_count, req.SeckillHashKey)
-	value := GRDB.DecrBy(RDBContext, count, 1)
-	if value.Val() <= 0 {
+	before := GRDB.Get(RDBContext, count).Val()
+	beforeCount, err2 := strconv.Atoi(before)
+	fmt.Println("beforeCount", beforeCount)
+	if err2 != nil {
+		fmt.Println("err2", err2)
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid seckill_count format" + err2.Error(),
+		})
+		return
+	}
+	if beforeCount <= 0 {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
 			"error": "商品已售空",
 		})
 	}
+	GRDB.DecrBy(RDBContext, count, 1)
 	GRDB.LPush(RDBContext, rds_history_buy, req.UserHash)
 	c.AbortWithStatus(http.StatusOK)
 }
